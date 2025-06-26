@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Voting Results</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      padding: 30px;
+      text-align: center;
+    }
+    h1 {
+      color: #444;
+      margin-bottom: 30px;
+    }
+    .counts {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    canvas {
+      max-width: 400px;
+      margin: auto;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h1>Live Voting Results</h1>
+
+  <div class="counts">
+    Cats: <span id="cats">-</span> |
+    Dogs: <span id="dogs">-</span>
+  </div>
+
+  <canvas id="voteChart" width="400" height="400"></canvas>
+
+  <div class="footer">
+    Auto-refreshes every 5 seconds
+  </div>
+
+  <script>
+    const apiURL = 'https://4v2076t08l.execute-api.us-east-1.amazonaws.com/results';
+
+    const ctx = document.getElementById('voteChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Cats', 'Dogs'],
+        datasets: [{
+          data: [0, 0],
+          backgroundColor: ['#4bc0c0', '#ff6384'],
+          borderColor: ['#fff', '#fff'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+
+    function fetchVotes() {
+      fetch(apiURL, { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('cats').textContent = data.cats;
+          document.getElementById('dogs').textContent = data.dogs;
+
+          chart.data.datasets[0].data = [data.cats, data.dogs];
+          chart.update();
+        })
+        .catch(error => {
+          console.error('Failed to fetch vote data:', error);
+        });
+    }
+
+    // Fetch votes immediately and every 5 seconds
+    fetchVotes();
+    setInterval(fetchVotes, 5000);
+  </script>
+</body>
+</html>

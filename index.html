@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vote Now!</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f0f2f5, #d0e6f7);
+      text-align: center;
+      padding: 50px;
+      margin: 0;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 40px;
+      font-size: 2.5em;
+    }
+
+    button {
+      border: none;
+      padding: 15px 30px;
+      margin: 10px;
+      font-size: 1.2em;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .cat-btn {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .dog-btn {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    #status {
+      margin-top: 30px;
+      font-size: 1.2em;
+      color: #2c3e50;
+      font-weight: bold;
+    }
+
+    .footer {
+      margin-top: 50px;
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <h1>Vote for Your Favorite!</h1>
+  <button class="cat-btn" onclick="vote('cats')">Vote Cats 🐱</button>
+  <button class="dog-btn" onclick="vote('dogs')">Vote Dogs 🐶</button>
+  <p id="status"></p>
+
+  <script>
+    function vote(choice) {
+      fetch('https://4v2076t08l.execute-api.us-east-1.amazonaws.com/vote', {
+        method: 'POST',
+        body: JSON.stringify({ vote: choice }),
+        headers: { 'Content-Type': 'application/json' }
+      }).then(res => {
+        if (res.ok) {
+          document.getElementById('status').textContent = "✅ Vote submitted!";
+        } else {
+          document.getElementById('status').textContent = "❌ Failed to submit vote.";
+        }
+      }).catch(() => {
+        document.getElementById('status').textContent = "⚠️ Network error.";
+      });
+    }
+  </script>
+
+  <div class="footer">
+  Hosted on AWS | Powered by Lambda, API Gateway & DynamoDB <br>
+  Made with ❤️ by <strong>Viren Hooda</strong>
+</div>
+
+</body>
+</html>
