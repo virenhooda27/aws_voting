@@ -1,4 +1,4 @@
-# 🗳️ MyVoteAWS — A Serverless Live Voting App on AWS
+# 🗳️ AWS Voting — A Serverless Live Voting App on AWS
 
 [![Made with AWS](https://img.shields.io/badge/Made%20with-AWS-orange?style=for-the-badge&logo=amazon-aws)](https://aws.amazon.com/)
 [![Terraform](https://img.shields.io/badge/IaC-Terraform-blueviolet?style=for-the-badge&logo=terraform)](https://www.terraform.io/)
